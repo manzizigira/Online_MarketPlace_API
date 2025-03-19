@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop Products</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+        background: #002147;
+        padding: 20px 0;
+    }
+
+    .navbar .title {
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        margin-left: 50px;
+    }
+
+    .container-fluid {
+        display: flex;
+    }
+
+    .navbar .nav-buttons {
+        margin-right: 30px;
+    }
+
+    .navbar .nav-buttons button {
+        margin-left: 10px;
+        color: white;
+        background-color: #0056b3;
+        border: none;
+    }
+
+    .navbar .nav-buttons button:hover {
+        background-color: #00408a;
+    }
+
+
+            .sidebar {
+        position: fixed;
+        width: 250px;
+        height: 95%;
+        background-color: #002147;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-top: 1px;
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        margin: 5px 0;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+    }
+
+    .main-content {
+        margin-left: 260px;
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .category-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .category-list li {
+        margin: 10px 0;
+    }
+
+    .category-list a {
+        text-decoration: none;
+        color:white;
+        font-weight: bold;
+    }
+
+    .category-list a:hover {
+        color: #0056b3;
+    }
+
+    .product-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 10px;
+        width: 250px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .product-card img {
+        max-width: 100%;
+    }
+
+    .product-card h3 {
+        font-size: 1.2em;
+        margin-top: 10px;
+    }
+
+    .product-card p {
+        color: #555;
+    }
+
+    .product-card span {
+        display: block;
+        margin-top: 5px;
+        font-size: 1.1em;
+        color: #007bff;
+    }
+
+    .search-form input {
+        width: 200px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+    }
+
+    .search-form button {
+        padding: 8px 12px;
+        background-color: #0056b3;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .search-form button:hover {
+        background-color: #00408a;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<div class="navbar">
+  <div class="title-container">
+    <div class="title" style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Your Pending Orders</div>
+  </div>
+  <div class="nav-buttons">
+    <button onclick="window.location.href='/user/order-history'">View Order History</button>
+    <button onclick="window.location.href='/user/orders'">View Pending Orders</button>
+    <button onclick="window.location.href='/manage-profile'">Manage Profile</button>
+  </div>
+</div>
+
+<!-- Sidebar (Categories) -->
+<div class="sidebar">
+  <h2 style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Categories</h2>
+  <ul class="category-list">
+    <li>
+      <a th:href="@{/shop}">Home</a>
+    </li>
+    <li th:each="category : ${categories}">
+      <a th:href="@{/category/{categoryName}(categoryName=${category.categoryName})}" th:text="${category.categoryName}"></a>
+    </li>
+  </ul>
+
+  <div class="spacer"></div>
+
+  <!-- Logout button -->
+  <a class="logout-btn" onclick="window.location.href='/viewLoginPage'">Logout</a>
+</div>
+<!-- Main Content Area -->
+<div class="container-fluid">
+
+  <!-- Main Content (Products and Search) -->
+  <div class="main-content">
+    <h1>Available Products</h1>
+
+    <!-- Search Products Form -->
+    <form class="search-form" th:action="@{/search}" method="get" style="margin-left:1200px;">
+      <input type="text" name="query" placeholder="Search products..." />
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Display products based on category, tag, or search -->
+    <div>
+      <h2>Product Results</h2>
+      <div th:if="${#lists.isEmpty(products)}">
+        <p>No products found.</p>
+      </div>
+      <div class="product-cards">
+        <div th:each="product : ${products}" class="product-card">
+          <h3 th:text="${product.name}"></h3>
+          <p th:text="${product.description}"></p>
+          <span th:text="${product.unitPrice}"></span>
+          <div>
+            <a th:href="@{/tag/{tag}(tag=${product.tags})}">View by Tag</a>
+          </div>
+          <form th:action="@{/productDetails}" method="post">
+            <input type="hidden" name="id" th:value="${product.id}" />
+            <button type="submit" class="btn btn-primary">View Details</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar {
+        background: #002147;
+        padding: 20px 0;
+    }
+
+        .navbar .nav-buttons {
+        margin-right: 30px;
+    }
+
+    .navbar .nav-buttons button {
+        margin-left: 10px;
+        color: white;
+        background-color: #0056b3;
+        border: none;
+    }
+
+    .navbar .nav-buttons button:hover {
+        background-color: #00408a;
+    }
+
+        .sidebar {
+        position: fixed;
+        width: 250px;
+        height: 95%;
+        background-color: #002147;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-top: 1px;
+
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        margin: 5px 0;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+    }
+    .main-content {
+        margin-left: 240px;
+        padding: 20px;
+    }
+
+    .order-details-table {
+        width: 90%;
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    .order-details-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .order-details-table th, .order-details-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .order-details-table th {
+        background-color: #f1f1f1;
+        color: #002147;
+        font-size: 14px;
+    }
+
+    .order-details-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .order-details-table td a {
+        color: #0056b3;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .order-details-table td a:hover {
+        color: #00408a;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-body {
+        background-color: #f8f9fa;
+    }
+
+    .review-form label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .review-form textarea, .review-form select, .review-form button {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 12px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .review-form button {
+        background-color: #0056b3;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .review-form button:hover {
+        background-color: #00408a;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<div class="navbar">
+  <div class="title-container">
+    <div class="title" style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Order Details</div>
+  </div>
+  <div class="nav-buttons">
+    <button onclick="window.location.href='/user/order-history'">View Order History</button>
+    <button onclick="window.location.href='/user/orders'">View Pending Orders</button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <h2 style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Categories</h2>
+  <ul class="category-list">
+    <li>
+      <a th:href="@{/shop}">Home</a>
+    </li>
+    <li th:each="category : ${categories}">
+      <a th:href="@{/category/{categoryName}(categoryName=${category.categoryName})}" th:text="${category.categoryName}"></a>
+    </li>
+  </ul>
+  <div class="spacer"></div>
+
+  <!-- Logout button -->
+  <a class="logout-btn" onclick="window.location.href='/viewLoginPage'">Logout</a>
+</div>
+<!-- Main Content Area -->
+<div class="main-content">
+
+  <!-- Order Details Table -->
+  <div class="order-details-table">
+    <table>
+      <thead>
+      <tr>
+        <th>Order Tracking Number</th>
+        <th>Total Quantity</th>
+        <th>Total Price</th>
+        <th>Status</th>
+        <th>Date Created</th>
+        <th>Last Updated</th>
+        <th>Products</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td th:text="${order.orderTrackingNumber}"></td>
+        <td th:text="${order.totalQuantity}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td th:text="${order.status}"></td>
+        <td th:text="${order.dateCreated}"></td>
+        <td th:text="${order.lastUpdated}"></td>
+        <td>
+          <ul>
+            <li th:each="product : ${order.products}">
+              <span th:text="${product.name}"></span>
+
+              <!-- Only show review button if order is delivered -->
+              <div th:if="${order.status == 'DELIVERED'}">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                  Review Product
+                </button>
+
+                <!-- Review Modal -->
+                <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="reviewModalLabel">Review Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="/submit" method="post">
+                          <input type="hidden" name="productId" th:value="${product.id}" />
+                          <label id="rating">Rating:</label>
+                          <select name="rating" required>
+                            <option value="1">1 - Poor</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="3">3 - Good</option>
+                            <option value="4">4 - Very Good</option>
+                            <option value="5">5 - Excellent</option>
+                          </select>
+                          <br />
+                          <label id="comment">Review:</label>
+                          <textarea name="comment" required></textarea>
+                          <br />
+                          <button type="submit" class="btn btn-primary">Submit Review</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

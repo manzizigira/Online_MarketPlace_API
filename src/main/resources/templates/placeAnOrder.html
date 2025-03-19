@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Quantity</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .navbar {
+            background: #002147;
+            padding: 20px 0;
+        }
+            .navbar .nav-buttons {
+        margin-right: 30px;
+    }
+
+    .navbar .nav-buttons button {
+        margin-left: 10px;
+        color: white;
+        background-color: #0056b3;
+        border: none;
+    }
+
+    .navbar .nav-buttons button:hover {
+        background-color: #00408a;
+    }
+            .navbar .title {
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        margin-left: 50px;
+    }
+        .sidebar {
+        position: fixed;
+        width: 250px;
+        height: 95%;
+        background-color: #002147;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-top: 1px;
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        margin: 5px 0;
+    }
+
+    .sidebar a:hover {
+        background-color: #333;
+    }
+        .product-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .order-details {
+            padding: 20px;
+        }
+        .order-btn {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .order-btn:hover {
+            background-color: #00408a;
+        }
+    </style>
+</head>
+<body>
+<!-- Top Navigation Bar -->
+<div class="navbar">
+    <div class="title">Shop Products</div>
+    <div class="nav-buttons">
+        <button onclick="window.location.href='/user/order-history'">View Order History</button>
+        <button onclick="window.location.href='/user/orders'">View Pending Orders</button>
+    </div>
+</div>
+
+<!-- Sidebar (Categories) -->
+<div class="sidebar">
+    <h2 style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Categories</h2>
+    <ul class="category-list">
+        <li>
+            <a th:href="@{/shop}">Home</a>
+        </li>
+        <li th:each="category : ${categories}">
+            <a th:href="@{/category/{categoryName}(categoryName=${category.categoryName})}" th:text="${category.categoryName}"></a>
+        </li>
+    </ul>
+
+    <div class="spacer"></div>
+
+    <!-- Logout button -->
+    <a class="logout-btn" onclick="window.location.href='/viewLoginPage'">Logout</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 order-details">
+            <h2 th:text="${product.name}"></h2>
+            <p th:text="${product.description}"></p>
+            <h4>Price: <span th:text="${product.unitPrice}"></span> USD</h4>
+
+            <form action="/placeOrder" method="post">
+                <div class="mb-3">
+                    <label id="productQuantities" class="form-label">Enter Quantity</label>
+                    <input type="number" id="totalQuantity" name="totalQuantity" required>
+                </div>
+
+                <!-- Hidden Product ID -->
+                <input type="hidden" name="productId" th:value="${product.id}">
+
+                <!-- Order Button -->
+                <button type="submit" class="order-btn">Confirm Order</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

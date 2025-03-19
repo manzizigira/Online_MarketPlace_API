@@ -1,0 +1,159 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - E-Commerce</title>
+</head>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+.navbar {
+  background-color: navy;
+  color: white;
+  padding: 15px 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.container {
+  width: 50%;
+  margin: 50px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.form-group label {
+  width: 45%;
+  display: block;
+  font-weight: bold;
+}
+.form-group input {
+  width: 50%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: -90px;
+  margin-right: 90px;
+}
+.full-width {
+  width: 100%;
+}
+.submit-btn {
+  width: 100%;
+  background-color: navy;
+  color: white;
+  padding: 10px;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.login-link {
+  text-align: center;
+  margin-top: 10px;
+}
+.login-link a {
+  color: navy;
+  text-decoration: none;
+}
+.error-box {
+  display: none;
+  background-color: #ffdddd;
+  color: #d8000c;
+  padding: 12px;
+  border: 1px solid #d8000c;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+</style>
+<body class="body-bg">
+<div class="navbar">Ecommerce Website</div>
+<div class="container">
+  <h2 style="text-align: center; margin-top:8px; margin-bottom:38px;">Create an Account</h2>
+  <div id="errorBox" class="error-box">Email already exists! Please use a different email.</div>
+  <form id="registerForm" onsubmit="return handleFormSubmit(event)">
+    <div class="form-group" style="margin-bottom:38px;">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" name="firstName" required>
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" required>
+    </div>
+    <div class="form-group" style="margin-bottom:38px;">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" class="full-width" required>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" class="full-width" required>
+    </div>
+    <div class="form-group" style="margin-bottom:38px;">
+      <label for="phoneNumber">Phone Number</label>
+      <input type="tel" id="phoneNumber" name="phoneNumber" class="full-width" required>
+
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" name="dob" class="full-width" required>
+    </div>
+    <div class="form-group" style="margin-right:480px; margin-bottom:38px;">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" class="full-width" required>
+    </div>
+    <button type="submit" class="submit-btn">Register</button>
+  </form>
+  <p class="login-link">Already have an account? <a th:href="@{/viewLoginPage}" class="link">Login</a></p>
+
+  <div id="successMessage" class="success-message" style="display: none;">
+    Registration successful! Please check your email for verification.
+  </div>
+  <div id="errorMessage" class="error-message" style="display: none;">
+    Registration failed! Please try again.
+  </div>
+</div>
+
+<script>
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const userData = {
+      email: document.getElementById("email").value,
+      username: document.getElementById("username").value,
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      phoneNumber: document.getElementById("phoneNumber").value,
+      dob: document.getElementById("dob").value,
+      password: document.getElementById("password").value
+    };
+
+    try {
+      const response = await fetch("/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        window.location.href = "/viewLoginPage";
+      } else {
+          document.getElementById("errorBox").innerText = data.message;
+          document.getElementById("errorBox").style.display = "block";
+      }
+    } catch (error) {
+        document.getElementById("errorBox").innerText = "An error occurred. Please try again.";
+        document.getElementById("errorBox").style.display = "block";
+    }
+  }
+</script>
+
+</body>
+</html>
