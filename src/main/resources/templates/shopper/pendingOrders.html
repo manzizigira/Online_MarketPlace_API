@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Orders</title>
+    <link th:href="@{/shopperCSS/pendingOrdersCSS.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<div class="navbar">
+    <div class="title-container">
+        <div class="title" style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Your Pending Orders</div>
+    </div>
+    <div class="nav-buttons">
+        <button onclick="window.location.href='/user/order-history'">View Order History</button>
+        <button onclick="window.location.href='/user/orders'">View Pending Orders</button>
+    </div>
+</div>
+
+<div class="sidebar">
+    <h2 style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Categories</h2>
+    <ul class="category-list">
+        <li>
+            <a th:href="@{/shop}">Home</a>
+        </li>
+        <li th:each="category : ${categories}">
+            <a th:href="@{/category/{categoryName}(categoryName=${category.categoryName})}" th:text="${category.categoryName}"></a>
+        </li>
+    </ul>
+
+    <div class="spacer"></div>
+
+    <!-- Logout button -->
+    <a class="logout-btn" onclick="window.location.href='/viewLoginPage'">Logout</a>
+
+</div>
+
+<!-- Main Content Area -->
+<div class="order-table">
+
+    <!-- Order Table -->
+    <table>
+        <thead>
+        <tr>
+            <th>Order Tracking Number</th>
+            <th>Total Quantity</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Date Created</th>
+            <th>Last Updated</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.orderTrackingNumber}"></td>
+            <td th:text="${order.totalQuantity}"></td>
+            <td th:text="${order.totalPrice}"></td>
+            <td th:text="${order.status}"></td>
+            <td th:text="${order.dateCreated}"></td>
+            <td th:text="${order.lastUpdated}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

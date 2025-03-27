@@ -60,7 +60,7 @@ public class ProductController {
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
         model.addAttribute("newProduct", new Products());
-        return "products";
+        return "admin/products";
     }
 
     @PostMapping("/registerProducts")
@@ -91,7 +91,7 @@ public class ProductController {
         model.addAttribute("categories", categories);
         model.addAttribute("userId", userId);  // Add userId to the model
 
-        return "shopProducts";  // Thymeleaf template name
+        return "shopper/shopProducts";  // Thymeleaf template name
     }
 
     @PostMapping("/productDetails")
@@ -100,7 +100,7 @@ public class ProductController {
         List<Categories> categories = categoryService.viewAllCategories();
         model.addAttribute("product", products);
         model.addAttribute("categories", categories);
-        return "product-details";
+        return "shopper/product-details";
     }
 
 
@@ -110,7 +110,7 @@ public class ProductController {
         List<Categories> categories = categoryService.viewAllCategories();
         model.addAttribute("product", products);
         model.addAttribute("categories", categories);
-        return "placeAnOrder";
+        return "shopper/placeAnOrder";
     }
 
 
@@ -179,7 +179,7 @@ public class ProductController {
         List<Categories> categories = categoryService.viewAllCategories();
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
-        return "shopProducts"; // Thymeleaf template
+        return "shopper/shopProducts"; // Thymeleaf template
     }
 
     @GetMapping("/tag/{tag}")
@@ -188,7 +188,7 @@ public class ProductController {
         List<Categories> categories = categoryService.viewAllCategories();
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
-        return "shopProducts"; // Same template for listing products
+        return "shopper/shopProducts"; // Same template for listing products
     }
 
     @GetMapping("/search")
@@ -197,7 +197,7 @@ public class ProductController {
         List<Categories> categories = categoryService.viewAllCategories();
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
-        return "shopProducts";
+        return "shopper/shopProducts";
     }
 
 
@@ -235,7 +235,7 @@ public class ProductController {
         if (product != null) {
             model.addAttribute("product", product);
             model.addAttribute("categories", categories); // Add categories to the model
-            return "update-product";
+            return "admin/update-product";
         } else {
             return "redirect:/viewProductsPage";
         }

@@ -59,9 +59,9 @@ public class OrderController {
             model.addAttribute("orders", pendingOrders);
             model.addAttribute("categories", categories);
 
-            return "pendingOrders";  // Thymeleaf template name (pendingOrders.html)
+            return "shopper/pendingOrders";  // Thymeleaf template name (pendingOrders.html)
         } catch (Exception e) {
-            return "error";  // Handle the exception (you can show a custom error page)
+            return "error";  // Handle the exception
         }
     }
 
@@ -87,9 +87,9 @@ public class OrderController {
             model.addAttribute("orders", allOrders);
             model.addAttribute("categories", categories);
 
-            return "order-history";  // Thymeleaf template name (order-history.html)
+            return "shopper/order-history";  // Thymeleaf template name (order-history.html)
         } catch (Exception e) {
-            return "error";  // Handle the exception (you can show a custom error page)
+            return "error";  // Handle the exception
         }
     }
 
@@ -101,7 +101,7 @@ public class OrderController {
         List<Categories> categories = categoryService.viewAllCategories();
         model.addAttribute("order", order);
         model.addAttribute("categories", categories);
-        return "order-details";
+        return "shopper/order-details";
     }
 
 
@@ -150,7 +150,7 @@ public class OrderController {
         List<Orders> ordersList = orderService.fetchOrders();
         model.addAttribute("orders", ordersList);
 
-        return "ordersManagement";
+        return "admin/ordersManagement";
 
     }
 
@@ -175,7 +175,7 @@ public class OrderController {
 
         if (orders != null) {
             model.addAttribute("order", orders);
-            return "order-update";
+            return "admin/order-update";
         } else {
             return "redirect:/viewOrderManagement";
         }
@@ -188,7 +188,7 @@ public class OrderController {
             return "redirect:/viewOrderManagement"; // Redirect to the product list page
         } catch (NumberFormatException e) {
             // Handle invalid id format (though this won't happen with Long type)
-            return "redirect:/viewOrderManagement"; // Handle errors gracefully
+            return "error"; // Handle errors gracefully
         }
     }
 

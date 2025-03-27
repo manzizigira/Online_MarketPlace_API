@@ -1,0 +1,196 @@
+.navbar {
+    background: #002147;
+    padding: 20px 0;
+}
+
+.sidebar {
+    position: fixed;
+    width: 250px;
+    height: 95%;
+    background-color: #002147;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 1px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.sidebar a:hover {
+    background-color: #333;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.logout-btn {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    background-color: #d9534f;
+    color: white;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
+.main-content {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+.activity-selection {
+    margin-bottom: 20px;
+}
+
+.form-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin: auto;
+    display: none; /* Hide form initially */
+}
+
+.form-container h2 {
+    color: #002147;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.form-container label {
+    font-weight: bold;
+    color: #333;
+    margin-top: 8px;
+}
+
+.form-container input,
+.form-container select,
+.form-container button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.form-container button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #00408a;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.table-actions .button {
+    padding: 8px 10px;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.product-table {
+    width: 90%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.product-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-table th, .product-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-table th {
+    background-color: #f1f1f1;
+    color: #002147;
+    font-size: 14px;
+}
+
+.product-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.product-table td button {
+    background-color: #28a745;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.product-table td button:hover {
+    background-color: #218838;
+}
+
+/* Popup Styling */
+.popup-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 9999; /* Make sure the popup is on top */
+}
+
+.popup {
+    max-width: 600px;
+    margin: auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: block; /* Show popup */
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #0056b3;
+}

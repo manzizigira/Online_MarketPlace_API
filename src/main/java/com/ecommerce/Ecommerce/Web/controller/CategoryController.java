@@ -22,7 +22,7 @@ public class CategoryController {
         List<Categories> fetchAll = categoryService.viewAllCategories();
         model.addAttribute("categories", fetchAll);
         model.addAttribute("newCategory", new Categories());
-        return "add-category";
+        return "admin/add-category";
     }
 
     @GetMapping("/viewCategories")
@@ -56,7 +56,7 @@ public class CategoryController {
 
         if (categories != null) {
             model.addAttribute("category", categories);
-            return "update-category";
+            return "admin/update-category";
         } else {
             return "redirect:/viewCategoryPage";
         }

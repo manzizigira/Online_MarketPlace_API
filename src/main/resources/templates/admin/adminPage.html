@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Page</title>
+  <link th:href="@{/adminCSS/adminPageCSS.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<div class="navbar">
+  <div class="title-container">
+    <div class="title" style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Ecommerce Website</div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+  <a th:href="@{/viewProductsPage}" style="color: white;">Products</a>
+  <a th:href="@{/viewUserManagement}" style="color: white;">Users</a>
+  <a th:href="@{/viewOrderManagement}" style="color: white;">Orders</a>
+  <a th:href="@{/viewCategoryPage}" style="color: white;">Categories</a>
+
+  <div class="spacer"></div>
+
+  <!-- Logout button -->
+  <a class="logout-btn" onclick="window.location.href='/viewLoginPage'">Logout</a>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+  <div class="welcome-message">
+    Welcome, Admin!
+  </div>
+  <p>Here you can manage products, users, orders, and categories. Use the sidebar to navigate through the different sections.</p>
+</div>
+
+</body>
+</html>

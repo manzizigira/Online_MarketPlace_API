@@ -47,6 +47,7 @@ public class UsersImplementation implements UserService {
 
     @Override
     public Users registerUser(Users users) {
+
         users.setPassword(bCryptPasswordEncoder.encode(users.getPassword())); // Encrypt password
 
         // Generate a JWT secret key and email verification token
@@ -62,6 +63,16 @@ public class UsersImplementation implements UserService {
         return savedUser;
     }
 
+    @Override
+    public void updateUser(Users users) {
+        // Ensure the user exists in the database before updating
+        if (users != null && users.getId() != null) {
+            usersRepository.save(users);  // This will update the user if they already exist, or insert if not
+        } else {
+            throw new IllegalArgumentException("User cannot be null or without an ID");
+        }
+    }
+
     private String generateSecretKeyForUser() {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
@@ -72,8 +83,8 @@ public class UsersImplementation implements UserService {
         }
     }
 
-    private void sendVerificationEmail(Users saveUser) {
-        String subject = "Verify your email Address\n";
+    public void sendVerificationEmail(Users saveUser) {
+        String subject = "Verify your email Address \n";
         String url = " http://localhost:8080/verify-email?token="+saveUser.getEmailVerificationToken();
         String body = "Please click the link to verify your email" + url;
 
@@ -178,5 +189,10 @@ public class UsersImplementation implements UserService {
     @Override
     public void deleteUserId(Long id) {
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    public Users getUserEmail(String email) {
+        return usersRepository.findByEmail(email);
     }
 }

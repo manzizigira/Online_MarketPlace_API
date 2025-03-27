@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Category</title>
+    <link rel="stylesheet" th:href="@{/adminCSS/updateCategoryCSS.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="title">Ecommerce Web</div>
+</div>
+
+<h1>Update Category</h1>
+
+<form action="/update-category" method="post">
+    <input type="hidden" name="id" th:value="${category.id}">
+
+    <label for="categoryName">Email</label>
+    <input type="text" id="categoryName" name="categoryName" th:value="${category.categoryName}" required>
+
+
+    <button type="submit">Update Category</button>
+</form>
+
+<a href="/viewProductsPage">Back to Category List</a>
+
+</body>
+</html>

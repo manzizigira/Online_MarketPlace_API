@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update User</title>
+  <link rel="stylesheet" th:href="@{/adminCSS/orderUpdateCSS.css}">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="title">Ecommerce Web</div>
+</div>
+
+<h1>Update User</h1>
+
+<form action="/update-order" method="post">
+  <input type="hidden" name="id" th:value="${order.id}">
+
+  <label for="totalQuantity">Total Quantity</label>
+  <input type="number" id="totalQuantity" name="totalQuantity" th:value="${order.totalPrice}" required>
+
+  <label for="totalPrice">Total Price</label>
+  <input type="number" id="totalPrice" name="totalPrice" th:value="${order.totalPrice}" required>
+
+
+  <button type="submit">Update Order</button>
+</form>
+
+<a href="/viewOrderManagement">Back to Order List</a>
+
+</body>
+</html>

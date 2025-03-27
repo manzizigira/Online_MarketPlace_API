@@ -47,10 +47,13 @@ public class SecurityConfig {
 
                 .csrf(customizer -> customizer.disable()) // Disable CSRF for API authentication
 
+
                 .authorizeHttpRequests(requests -> requests
 
+                        .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**","/otherCSS/**").permitAll()
+
                         .requestMatchers("/register", "/login", "/verify-email", "/viewLoginPage",
-                                "/viewRegistrationPage", "/user/**", "/static/**","/css/**", "/js/**", "/images/**",
+                                "/viewRegistrationPage","/verificationReminder","/resendVerification",
                                 "/assignRolePage","/assignRoles","/logout")
                         .permitAll()
 
@@ -99,4 +102,5 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
 }

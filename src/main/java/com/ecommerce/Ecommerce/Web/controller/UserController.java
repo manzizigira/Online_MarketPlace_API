@@ -11,6 +11,7 @@ import com.ecommerce.Ecommerce.Web.service.JWTService;
 import com.ecommerce.Ecommerce.Web.service.ProductService;
 import com.ecommerce.Ecommerce.Web.service.UserService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ import java.util.Map;
 
 
 @Controller
+@SessionAttributes("userName")
 public class UserController {
 
     private UserService userService;
@@ -72,7 +75,7 @@ public class UserController {
 
     @GetMapping("/viewAdminPage")
     public String showAdminPage(){
-        return "adminPage";
+        return "admin/adminPage";
     }
 
     @GetMapping("/viewShopperPage")
@@ -83,7 +86,7 @@ public class UserController {
         List<Products> products = productService.viewProducts();
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
-        return "shopProducts";
+        return "shopper/shopProducts";
     }
 
 
@@ -126,7 +129,7 @@ public class UserController {
         model.addAttribute("user", user);
 
         // Return the view name to the Thymeleaf template
-        return "userProfile";
+        return "shopper/userProfile";
     }
 
     @GetMapping("/viewUserManagement")
@@ -135,7 +138,7 @@ public class UserController {
         model.addAttribute("users", usersList);
         model.addAttribute("newUser", new Users());
 
-        return "userManagement";
+        return "admin/userManagement";
 
     }
 
@@ -194,7 +197,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public void loginUser(@RequestBody Users users, HttpServletResponse response) throws IOException {
+    public void loginUser(@RequestBody Users users, HttpServletResponse response, Model model) throws IOException {
 
         String token = userService.verifyUser(users);
 
@@ -203,8 +206,25 @@ public class UserController {
             return;
         }
 
+
+        // Fetch the user object after successful authentication to check the verification status
+        Users authenticatedUser = userService.getUsername(users.getUsername());
+
+        model.addAttribute("userName", authenticatedUser.getUsername());
+
+        // Check if the user's account is verified
+        if (!authenticatedUser.isVerified()) {
+            // Redirect to verification reminder page if not verified
+            response.setHeader("Location", "/verificationReminder");
+            return;
+        }
+
+        // If the user is verified, regenerate the JWT token (optional, based on your requirement)
+        String newToken = jwtService.generateToken(authenticatedUser, authenticatedUser.getJwtSecretKey());
+
+
         // Set the JWT token in a cookie
-        Cookie cookie = new Cookie("jwtToken", token);
+        Cookie cookie = new Cookie("jwtToken", newToken);
         cookie.setHttpOnly(true);  // Prevent JavaScript access to the cookie
         cookie.setSecure(true);  // Only send cookie over HTTPS (should be enabled in production)
         cookie.setPath("/");  // Path where the cookie is available
@@ -213,7 +233,7 @@ public class UserController {
 
 
         // Check user's role using the roles stored in the token
-        String roles = securityService.extractRoles(token);
+        String roles = securityService.extractRoles(newToken);
         System.out.println("User roles from token: " + roles);
 
         // Redirect based on role from token
@@ -255,10 +275,44 @@ public class UserController {
 
         user.setVerified(true);
         user.setEmailVerificationToken(null);
-        userService.registerUser(user);
+        userService.updateUser(user);
 
         return "email-verification";
     }
+
+    @GetMapping("/verificationReminder")
+    public String verificationPage(Model model){
+        String username = (String) model.getAttribute("userName");
+        model.addAttribute("username", username);
+        return "verification-reminder";
+    }
+
+    @PostMapping("/resendVerification")
+    public String resendVerificationPage(@RequestParam("username") String username,HttpServletResponse response){
+        // Look up the user by their username
+        Users user = userService.getUsername(username);
+
+        // If the user is not found, you can handle the error
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return "User not Found!"; // A page indicating user not found
+        }
+
+        // Check if the user is already verified
+        if (user.isVerified()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return "User Already Exists!"; // A page saying user is already verified
+        }
+
+        // Trigger the verification email
+        userService.sendVerificationEmail(user);
+
+        // Redirect to a confirmation page or show a success message
+        return "redirect:/viewLoginPage"; // A page indicating that the verification email was sent
+
+    }
+
+
 
 
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Profile</title>
+  <link rel="stylesheet" th:href="@{/shopperCSS/userProfileCSS.css}">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="title-container">
+    <div class="title" style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Your Pending Orders</div>
+  </div>
+  </div>
+</div>
+
+<!-- Sidebar (Categories) -->
+<aside class="sidebar">
+  <h2>Categories</h2>
+  <ul class="category-list">
+    <li><a th:href="@{/shop}">Home</a></li>
+    <li th:each="category : ${categories}">
+      <a th:href="@{/category/{categoryName}(categoryName=${category.categoryName})}" th:text="${category.categoryName}"></a>
+    </li>
+  </ul>
+  <a class="logout-btn" onclick="window.location.href='/viewLoginPage'" style="margin-top:700px;">Logout</a>
+</aside>
+<h1>Update Profile</h1>
+
+<form action="/updateUser" method="post">
+  <input type="hidden" name="id" th:value="${user.id}">
+
+  <label for="email">Email</label>
+  <input type="text" id="email" name="email" th:value="${user.email}" required>
+
+  <label for="username">Username</label>
+  <input type="text" id="username" name="username" th:value="${user.username}" required>
+
+  <label for="firstName">First Name</label>
+  <input type="text" id="firstName" name="firstName" th:value="${user.firstName}" required>
+
+  <label for="lastName">Last Name</label>
+  <input type="text" id="lastName" name="lastName" th:value="${user.lastName}" required>
+
+  <label for="dob">Date of Birth</label>
+  <input type="date" id="dob" name="dob" th:value="${user.dob}" required>
+
+  <label for="phoneNumber">Phone Number</label>
+  <input type="number" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required>
+
+
+  <button type="submit">Update Profile</button>
+</form>
+
+<a href="/viewShopperPage">Back to Home</a>
+
+</body>
+</html>

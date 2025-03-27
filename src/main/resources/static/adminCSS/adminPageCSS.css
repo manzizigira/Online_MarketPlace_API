@@ -1,0 +1,58 @@
+.navbar {
+    background: #002147;
+    padding: 20px 0; /* Increased padding for a bigger navbar */
+}
+
+.sidebar {
+    position: fixed;
+    width: 250px; /* Sidebar width increased */
+    height: 95%;
+    background-color: #002147;
+    padding-top: 20px;
+    padding-bottom: 20px; /* Ensuring space at the bottom for the logout button */
+    margin-top: 1px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.sidebar a:hover {
+    background-color: #333;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+/* Logout button at the bottom */
+.logout-btn {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    background-color: #d9534f; /* Red color for logout */
+    color: white;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    background-color: #c9302c;
+}
+
+/* Main content styling */
+.main-content {
+    margin-left: 260px; /* Adjusts for the sidebar width */
+    padding: 20px;
+}
+
+.welcome-message {
+    font-size: 24px;
+    font-weight: bold;
+    color: #002147;
+}

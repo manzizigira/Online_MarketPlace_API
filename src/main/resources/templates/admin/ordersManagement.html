@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Orders Management</title>
+  <link th:href="@{/adminCSS/ordersManagementCSS.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<div class="navbar">
+  <div class="title-container">
+    <div class="title" style="color: white; font-size: 20px; font-weight: bold; margin-left: 50px;">Orders Management</div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+  <a th:href="@{/viewProductsPage}" style="color: white;">Products</a>
+  <a th:href="@{/viewUserManagement}" style="color: white;">Users</a>
+  <a th:href="@{/viewOrderManagement}" style="color: white;">Orders</a>
+  <a th:href="@{/viewCategoryPage}" style="color: white;">Categories</a>
+
+  <div class="spacer"></div>
+
+  <!-- Logout button -->
+  <a class="logout-btn" onclick="window.location.href='/viewLoginPage'">Logout</a>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+
+
+  <!-- Orders List Table -->
+  <div class="order-table">
+    <h2>Orders List</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+        <tr>
+          <th>Order Tracking Number</th>
+          <th>Total Quantity</th>
+          <th>Total Price</th>
+          <th>Status</th>
+          <th>Date Created</th>
+          <th>User</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+          <td th:text="${order.orderTrackingNumber}"></td>
+          <td th:text="${order.totalQuantity}"></td>
+          <td th:text="${order.totalPrice}"></td>
+          <td th:text="${order.status}"></td>
+          <td th:text="${order.dateCreated}"></td>
+          <td th:text="${order.users.username}"></td>
+          <td>
+            <div class="btn btn-secondary"
+                 style="box-shadow: 1px 0px 2px; width: 90px;"
+                 th:attr="onclick='submitForm(' + ${order.id} + ')'" >
+              Update
+            </div>
+            <!-- Delete Button with data-id attribute to store the product ID -->
+            <div class="btn btn-warning"
+                 style="box-shadow: 1px 0px 2px; width:90px"
+                 th:attr="onclick='confirmDelete(' + ${order.id} + ')'">
+              Delete
+            </div>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<form id="updateProductForm" action="/update-orders" method="POST" style="display:none;">
+  <input type="hidden" name="id" id="orderId">
+</form>
+
+<form id="deleteForm" action="/delete-order" method="POST" style="display:none;">
+  <input type="hidden" name="id" id="deleteOrderId">
+</form>
+
+<script>
+    function showAddPopup() {
+        document.getElementById("form-popup").style.display = "block";
+    }
+
+    function submitForm(orderId) {
+        console.log("Updating Order with ID:", orderId);
+        document.getElementById('orderId').value = orderId;
+        document.getElementById('updateProductForm').submit();
+    }
+
+    function confirmDelete(orderId) {
+
+        // Set the product ID to the hidden input field in the form
+        document.getElementById('deleteOrderId').value = orderId;
+
+        // Submit the form to trigger the deletion
+        document.getElementById('deleteForm').submit();
+    }
+</script>
+
+</body>
+</html>
